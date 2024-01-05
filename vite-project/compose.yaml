@@ -1,0 +1,32 @@
+# define the services/containers to be run
+services:
+  # define the application container/service
+  # we can use any name for the service. Here it is `web`
+  # we can create multiple services as well
+  web:
+    # specify the image to build the container from
+    # this can be any image available in docker hub or a custom one or the one we want to build
+    build:
+      # specify the path to the Dockerfile
+      context: .
+      # specify the file name (optional)
+      dockerfile: Dockerfile
+    
+    # specify the port mapping from host to the container
+    # this is similar to the -p flag in `docker run` command
+    # first port is the port on host machine and the second is the port inside the container
+    ports:
+      - 5173:5173
+
+    # specify the volumes to mount
+    # what this does is it mounts the current directory to the `/app` directory inside the container. 
+    # due to this, any changes made to the files in the current directory will be reflected inside the container. It is similar to the -v flag in `docker run` command. 
+    # even if a container is stopped or deleted, volumes are not deleted and can be used by other containers as well.
+    volumes:
+      # over here, we are mounting the current directory to the `/app` directory inside the container (which is the working directory of the container)
+      # syntax is `<path to the directory on host>:<path to the directory inside the container>`
+      # we're doing this because we want to reflect the changes made to the files in the current directory inside the container
+      - .:/app
+      # we also mount the node_modules directory inside the container at /app/node_modules. This is done to avoid installing the node_modules inside the container. 
+      # node_modules will be installed on the host machine and mounted inside the container
+      - /app/node_modules
